@@ -1,12 +1,14 @@
 package com.example.richellerazon.simpletodo;
 
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.apache.commons.io.FileUtils;
 
@@ -52,6 +54,17 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+
+        lvItems.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
+                        Toast.makeText(MainActivity.this, "Here! " + pos, Toast.LENGTH_SHORT).show();
+                        DialogFragment newFragment = new FireMissilesDialogFragment();
+                        newFragment.show(getSupportFragmentManager(), "missiles");
+                    }
+                }
+        );
     }
 
     private void readItems() {
@@ -74,3 +87,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
+
