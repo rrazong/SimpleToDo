@@ -61,23 +61,17 @@ public class MainActivity extends AppCompatActivity {
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
-                        Toast.makeText(MainActivity.this, "Here! " + pos, Toast.LENGTH_SHORT).show();
-// TODO: get string from position pos in Array
+                        Toast.makeText(MainActivity.this, items.get(pos), Toast.LENGTH_SHORT).show();
+
                         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                        Fragment prev = getSupportFragmentManager().findFragmentByTag("edit");
+                        Fragment prev = getSupportFragmentManager().findFragmentByTag("editToDo");
                         if (prev != null) {
                             ft.remove(prev);
                         }
                         ft.addToBackStack(null);
 
-                        DialogFragment newFragment = EditTodoDialogFragment.newInstance("Here! " + pos);
-                        newFragment.show(ft, "edit");
-
-/*
-                        EditTodoDialogFragment editToDoFragment = new EditTodoDialogFragment();
-                        editToDoFragment.show(getSupportFragmentManager(), "edit");
-                        editToDoFragment.show(ft,"foo");
-*/
+                        DialogFragment newFragment = EditTodoDialogFragment.newInstance(items.get(pos));
+                        newFragment.show(ft, "editToDo");
                     }
                 }
         );
