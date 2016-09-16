@@ -1,8 +1,10 @@
 package com.example.richellerazon.simpletodo;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -60,8 +62,22 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
                         Toast.makeText(MainActivity.this, "Here! " + pos, Toast.LENGTH_SHORT).show();
-                        DialogFragment newFragment = new FireMissilesDialogFragment();
-                        newFragment.show(getSupportFragmentManager(), "missiles");
+// TODO: get string from position pos in Array
+                        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                        Fragment prev = getSupportFragmentManager().findFragmentByTag("edit");
+                        if (prev != null) {
+                            ft.remove(prev);
+                        }
+                        ft.addToBackStack(null);
+
+                        DialogFragment newFragment = EditTodoDialogFragment.newInstance("Here! " + pos);
+                        newFragment.show(ft, "edit");
+
+/*
+                        EditTodoDialogFragment editToDoFragment = new EditTodoDialogFragment();
+                        editToDoFragment.show(getSupportFragmentManager(), "edit");
+                        editToDoFragment.show(ft,"foo");
+*/
                     }
                 }
         );
