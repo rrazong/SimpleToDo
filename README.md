@@ -31,7 +31,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-![Video Walkthrough](https://goo.gl/photos/vaUQMvHX1nxfqwN99)
+![Video Walkthrough](https://lh3.googleusercontent.com/ozVPqtAwNazF2t0iHZoxp7-RhNLc1hndzFl400IZKq-j39odmBBE9tGFwEy7lcu26wzmwnAtBAF7xYLRVjKkkRBPMC6KvBLP7T9mR7LtKUszuJjzQoNy5p0-FHxq3Jz_r0PoFRurQvUfEUUjsVZqOtTYE3rWYHPvv5dGH28w3Csd-rK9uY6QAlMB_7bUrfs6Z_zJltmVQaxlx5j79bQSi1_a2R8ldlqgFIBEz5_larNiHUpY-e7XgHAT7kWWcWgBd6UwBBZQmDKT9ceObbSECf0y6nVwKedVkxatOp-KNyVa7nkVwRl7NfDU7EXlg0XChU4syfmI8x1TZ31lwfAublEBf4A_uTQ_JOBGYd1En5gkQdFqCIC-N72sQAE3SUEO2RMOQrmtZncJ_SIWf8WWsLxmoIJ58LGYNz6220UyrlHp73RNoltKZFI8QpWzBfCBUUDGUnf9YuNzpjDfXnHCXYl_z9_0GEr-jWrj781RNra45mj4NaasIoXn71tJqRdbSVCRL7LCRm6aw2Dj18jrpZMgFhy7LAOg1Z3rz5nckfHpTVJT6Etj-MBTLv4KOO61ksgl3QM-ik4_L8gw4eoL5JnME4PfOBmepEuAWcpQCr2Y-InFig=w519-h739-no)
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
