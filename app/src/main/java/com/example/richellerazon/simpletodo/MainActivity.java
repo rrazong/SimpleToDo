@@ -18,7 +18,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+    implements EditTodoDialogFragment.EditTodoDialogListener {
     ArrayList<String> items;
     ArrayAdapter<String> itemsAdapter;
     ListView lvItems;
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         ft.addToBackStack(null);
 
-                        DialogFragment newFragment = EditTodoDialogFragment.newInstance(items.get(pos));
+                        DialogFragment newFragment = EditTodoDialogFragment.newInstance(pos, items.get(pos));
                         newFragment.show(ft, "editToDo");
                     }
                 }
@@ -95,6 +96,13 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onFinishEditTodoDialog(int pos, String toDoText) {
+        items.set(pos, toDoText);
+        itemsAdapter.notifyDataSetChanged();
+        writeItems();
     }
 }
 

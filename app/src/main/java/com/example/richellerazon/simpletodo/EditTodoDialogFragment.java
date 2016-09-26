@@ -7,6 +7,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 /**
@@ -15,11 +16,15 @@ import android.widget.EditText;
 public class EditTodoDialogFragment extends DialogFragment {
     private View view;
     private EditText editTextView;
+    private Button cancelButton;
+    private Button saveButton;
+    private EditTodoDialogListener listener;
 
-    static EditTodoDialogFragment newInstance(String toDoText) {
+    static EditTodoDialogFragment newInstance(int pos, String toDoText) {
         EditTodoDialogFragment f = new EditTodoDialogFragment();
 
         Bundle args = new Bundle();
+        args.putInt("pos", pos);
         args.putString("toDoText", toDoText);
         f.setArguments(args);
 
@@ -27,9 +32,8 @@ public class EditTodoDialogFragment extends DialogFragment {
     }
 
     public interface EditTodoDialogListener {
-        void onFinishEditTodoDialog(String toDoText);
+        void onFinishEditTodoDialog(int pos, String toDoText);
     }
-    private EditTodoDialogListener listener;
 
     @Override
     public void onAttach(Context context) {
@@ -40,7 +44,7 @@ public class EditTodoDialogFragment extends DialogFragment {
             listener = (EditTodoDialogListener) context;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
-            throw new ClassCastException(context.toString()
+                 throw new ClassCastException(context.toString()
                     + " must implement EditTodoDialogListener");
         }
     }
@@ -55,17 +59,27 @@ public class EditTodoDialogFragment extends DialogFragment {
         editTextView = (EditText) view.findViewById(R.id.editText);
         String mToDoText = getArguments().getString("toDoText");
         editTextView.setText(mToDoText);
+
+        cancelButton = (Button) view.findViewById(R.id.cancelButton);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+
+        saveButton = (Button) view.findViewById(R.id.saveButton);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String itemText = editTextView.getText().toString();
+                int pos = getArguments().getInt("pos");
+
+                listener.onFinishEditTodoDialog(pos, itemText);
+                dismiss();
+            }
+        });
+
         return view;
-    }
-
-    public void onClickSave(View v) {
-        String itemText = editTextView.getText().toString();
-
-        listener.onFinishEditTodoDialog(itemText);
-        this.dismiss();
-    }
-
-    public void onClickCancel() {
-        this.dismiss();
     }
 }
