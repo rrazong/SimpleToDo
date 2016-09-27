@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity
         File filesDir = getFilesDir();
         File todoFile = new File(filesDir, "todo.txt");
         try {
-            items = new ArrayList<String>(FileUtils.readLines(todoFile));
+            items = new ArrayList<String>(FileUtils.readLines(todoFile, "UTF-8"));
         } catch (IOException e) {
             items = new ArrayList<String>();
         }
