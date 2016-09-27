@@ -8,4 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="MyTheme" parent="android:Theme">
+        <item name="android:background">#ffff99</item>
+        <item name="android:listViewStyle">@style/MyListViewStyle</item>
+    </style>
+    
+    <style name="MyListViewStyle" parent="android:Widget.ListView">
+        <item name="android:textColor">#ff0000</item>
+        <item name="android:background">#cccccc</item>
+    </style>
+
 </resources>
