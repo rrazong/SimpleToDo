@@ -20,19 +20,19 @@ public class EditTodoDialogFragment extends DialogFragment {
     private Button saveButton;
     private EditTodoDialogListener listener;
 
-    static EditTodoDialogFragment newInstance(int pos, String toDoText) {
+    static EditTodoDialogFragment newInstance(int pos, ToDoItem toDo) {
         EditTodoDialogFragment f = new EditTodoDialogFragment();
 
         Bundle args = new Bundle();
         args.putInt("pos", pos);
-        args.putString("toDoText", toDoText);
+        args.putSerializable("ToDoItem", toDo);
         f.setArguments(args);
 
         return f;
     }
 
     public interface EditTodoDialogListener {
-        void onFinishEditTodoDialog(int pos, String toDoText);
+        void onFinishEditTodoDialog(int pos, ToDoItem toDo);
     }
 
     @Override
@@ -57,8 +57,8 @@ public class EditTodoDialogFragment extends DialogFragment {
 
         view = inflater.inflate(R.layout.edit_item, null);
         editTextView = (EditText) view.findViewById(R.id.editText);
-        String mToDoText = getArguments().getString("toDoText");
-        editTextView.setText(mToDoText);
+        ToDoItem todo = (ToDoItem) getArguments().getSerializable("ToDoItem");
+        editTextView.setText(todo.getDescription());
 
         cancelButton = (Button) view.findViewById(R.id.cancelButton);
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +75,7 @@ public class EditTodoDialogFragment extends DialogFragment {
                 String itemText = editTextView.getText().toString();
                 int pos = getArguments().getInt("pos");
 
-                listener.onFinishEditTodoDialog(pos, itemText);
+                listener.onFinishEditTodoDialog(pos, new ToDoItem(itemText));
                 dismiss();
             }
         });

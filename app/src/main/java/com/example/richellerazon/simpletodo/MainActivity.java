@@ -1,16 +1,15 @@
 package com.example.richellerazon.simpletodo;
 
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.apache.commons.io.FileUtils;
 
@@ -20,8 +19,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
     implements EditTodoDialogFragment.EditTodoDialogListener {
-    ArrayList<String> items;
-    ArrayAdapter<String> itemsAdapter;
+    ArrayList<ToDoItem> items;
+    ArrayAdapter<ToDoItem> itemsAdapter;
     ListView lvItems;
 
     @Override
@@ -31,8 +30,9 @@ public class MainActivity extends AppCompatActivity
 
         lvItems = (ListView)findViewById(R.id.lvItems);
         readItems();
-        itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
-        lvItems.setAdapter(itemsAdapter);
+        itemsAdapter = new ArrayAdapter<ToDoItem>(this, android.R.layout.simple_list_item_1, items);
+        lvItems.setAdapter(itemsAdapter); // Fails here
+        // See http://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView#using-a-custom-arrayadapter
 
         setupListViewListener();
     }
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity
     public void onAddItem(View v) {
         EditText etNewItem = (EditText)findViewById(R.id.etNewItem);
         String itemText = etNewItem.getText().toString();
-        itemsAdapter.add(itemText);
+        itemsAdapter.add(new ToDoItem(itemText));
         etNewItem.setText("");
         writeItems();
     }
@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
-                        Toast.makeText(MainActivity.this, items.get(pos), Toast.LENGTH_SHORT).show();
 
                         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                         Fragment prev = getSupportFragmentManager().findFragmentByTag("editToDo");
@@ -81,10 +80,16 @@ public class MainActivity extends AppCompatActivity
     private void readItems() {
         File filesDir = getFilesDir();
         File todoFile = new File(filesDir, "todo.txt");
+        ArrayList<String> arr = new ArrayList<String>();
+        ArrayList<ToDoItem> items = new ArrayList<ToDoItem>();
+
         try {
-            items = new ArrayList<String>(FileUtils.readLines(todoFile, "UTF-8"));
+            arr.addAll(FileUtils.readLines(todoFile));
+            for (String str: arr) {
+                items.add( new ToDoItem(str));
+            }
         } catch (IOException e) {
-            items = new ArrayList<String>();
+            items = new ArrayList<ToDoItem>();
         }
     }
 
@@ -99,8 +104,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onFinishEditTodoDialog(int pos, String toDoText) {
-        items.set(pos, toDoText);
+    public void onFinishEditTodoDialog(int pos, ToDoItem toDo) {
+        items.set(pos, toDo);
         itemsAdapter.notifyDataSetChanged();
         writeItems();
     }
