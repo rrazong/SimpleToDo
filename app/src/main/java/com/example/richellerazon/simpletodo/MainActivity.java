@@ -1,27 +1,22 @@
 package com.example.richellerazon.simpletodo;
 
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
     implements EditTodoDialogFragment.EditTodoDialogListener {
-    ArrayList<String> items;
-    ArrayAdapter<String> itemsAdapter;
+    List<ToDo> mToDos;
+    ListAdapter itemsAdapter;
     ListView lvItems;
 
     @Override
@@ -30,8 +25,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         lvItems = (ListView)findViewById(R.id.lvItems);
-        readItems();
-        itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
+        itemsAdapter = new ListAdapter(this);
         lvItems.setAdapter(itemsAdapter);
 
         setupListViewListener();
@@ -40,9 +34,11 @@ public class MainActivity extends AppCompatActivity
     public void onAddItem(View v) {
         EditText etNewItem = (EditText)findViewById(R.id.etNewItem);
         String itemText = etNewItem.getText().toString();
-        itemsAdapter.add(itemText);
+
+        ToDo newToDo = new ToDo(itemText);
+        newToDo.save();
+        itemsAdapter.notifyDataSetChanged();
         etNewItem.setText("");
-        writeItems();
     }
 
     private void setupListViewListener() {
@@ -50,9 +46,8 @@ public class MainActivity extends AppCompatActivity
                 new AdapterView.OnItemLongClickListener() {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> adapter, View view, int pos, long id) {
-                        items.remove(pos);
+                        // .find() out which ToDo was clicked and then call .delete() ;
                         itemsAdapter.notifyDataSetChanged();
-                        writeItems();
                         return true;
                     }
                 }
@@ -62,7 +57,6 @@ public class MainActivity extends AppCompatActivity
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
-                        Toast.makeText(MainActivity.this, items.get(pos), Toast.LENGTH_SHORT).show();
 
                         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                         Fragment prev = getSupportFragmentManager().findFragmentByTag("editToDo");
@@ -71,38 +65,20 @@ public class MainActivity extends AppCompatActivity
                         }
                         ft.addToBackStack(null);
 
-                        DialogFragment newFragment = EditTodoDialogFragment.newInstance(pos, items.get(pos));
+                        // ToDo toDo = new ToDo('test');
+                        TextView tvTitle = (TextView) view.findViewById(R.id.rowTitle);
+                        // find the id and title of the todo that was clicked
+                        DialogFragment newFragment = EditTodoDialogFragment.newInstance(1, tvTitle.getText().toString());
                         newFragment.show(ft, "editToDo");
                     }
                 }
         );
     }
 
-    private void readItems() {
-        File filesDir = getFilesDir();
-        File todoFile = new File(filesDir, "todo.txt");
-        try {
-            items = new ArrayList<String>(FileUtils.readLines(todoFile));
-        } catch (IOException e) {
-            items = new ArrayList<String>();
-        }
-    }
-
-    private void writeItems() {
-        File filesDir = getFilesDir();
-        File todoFile = new File(filesDir, "todo.txt");
-        try {
-            FileUtils.writeLines(todoFile, items);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void onFinishEditTodoDialog(int pos, String toDoText) {
-        items.set(pos, toDoText);
+        // find the id (pos) of the todo that was edited, edit it, .save() it
         itemsAdapter.notifyDataSetChanged();
-        writeItems();
     }
 }
 
