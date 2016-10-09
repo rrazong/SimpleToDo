@@ -14,8 +14,12 @@ import java.util.List;
 public class ItemListAdapter extends BaseAdapter {
 
     private LayoutInflater myInflater;
+    private static class ViewHolder {
+        TextView title;
+    }
 
     public ItemListAdapter(Context context) {
+        super();
         myInflater = LayoutInflater.from(context);
     }
 
@@ -38,12 +42,21 @@ public class ItemListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        View customView = myInflater.inflate(R.layout.item_row, parent, false);
-        TextView tvTitle = (TextView) customView.findViewById(R.id.rowTitle);
+        ViewHolder viewHolder;
+        Item item = getItem(position);
 
-        tvTitle.setText(getItem(position).title);
+        if (convertView == null) {
+            viewHolder = new ViewHolder();
+            convertView = myInflater.inflate(R.layout.item_row, parent, false);
+            viewHolder.title = (TextView) convertView.findViewById(R.id.rowTitle);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
 
-        return customView;
+        viewHolder.title.setText(item.title);
+
+        return convertView;
     }
 
     public void add(Item item) {
